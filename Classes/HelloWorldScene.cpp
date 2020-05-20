@@ -24,9 +24,11 @@
 
 #include "HelloWorldScene.h"
 #include "SimpleAudioEngine.h"
+#include "cocos-ext.h"
 #include "../proj.win32/secondScene.h"
 
 USING_NS_CC;
+USING_NS_CC_EXT;
 
 Scene* HelloWorld::createScene()
 {
@@ -43,83 +45,168 @@ static void problemLoading(const char* filename)
 // on "init" you need to initialize your instance
 bool HelloWorld::init()
 {
+    //代码清单 3-14
+  if ( !Scene::init() ) {
+      return false;
+  }
 
+#ifndef Test_Scale9
+  Scale9Sprite* wizard = Scale9Sprite::create("wizard.png");
+  if (wizard == nullptr) return true;
+  wizard->setContentSize(Size(200, 200));
 
-    ////////////////////////////////
-    //// 1. super init first
-    //if ( !Scene::init() )
-    //{
-    //    return false;
-    //}
+  wizard->setPosition(Point(200, 200));
 
-    //auto visibleSize = Director::getInstance()->getVisibleSize();
-    //Vec2 origin = Director::getInstance()->getVisibleOrigin();
+  this->addChild(wizard);
+#endif
 
-    ///////////////////////////////
-    //// 2. add a menu item with "X" image, which is clicked to quit the program
-    ////    you may modify it.
+#ifdef Test_map
+  Map<int, Label*> MapLabel;
 
-    //// add a "close" icon to exit the progress. it's an autorelease object
-    //auto closeItem = MenuItemImage::create(
-    //                                       "CloseNormal.png",
-    //                                       "CloseSelected.png",
-    //                                       CC_CALLBACK_1(HelloWorld::menuCloseCallback, this));
+  for (int i = 1; i <= 100; i++) {
+    std::string name = "ShaunNo." + Value(i).asString();
 
-    //if (closeItem == nullptr ||
-    //    closeItem->getContentSize().width <= 0 ||
-    //    closeItem->getContentSize().height <= 0)
-    //{
-    //    problemLoading("'CloseNormal.png' and 'CloseSelected.png'");
-    //}
-    //else
-    //{
-    //    float x = origin.x + visibleSize.width - closeItem->getContentSize().width/2;
-    //    float y = origin.y + closeItem->getContentSize().height/2;
-    //    closeItem->setPosition(Vec2(x,y));
-    //}
+    Label* lab = Label::create(name.c_str(), "Arial", 30);
 
-    //// create menu, it's an autorelease object
-    //auto menu = Menu::create(closeItem, NULL);
-    //menu->setPosition(Vec2::ZERO);
-    //this->addChild(menu, 1);
+    MapLabel.insert(i, lab);
+  }
 
-    ///////////////////////////////
-    //// 3. add your codes below...
+  Label* lab = MapLabel.at(1);
 
-    //// add a label shows "Hello World"
-    //// create and initialize a label
+  lab->setPosition(Point(200, 400));
 
-    //auto label = Label::createWithTTF("Hello World", "fonts/Marker Felt.ttf", 24);
-    //if (label == nullptr)
-    //{
-    //    problemLoading("'fonts/Marker Felt.ttf'");
-    //}
-    //else
-    //{
-    //    // position the label on the center of the screen
-    //    label->setPosition(Vec2(origin.x + visibleSize.width/2,
-    //                            origin.y + visibleSize.height - label->getContentSize().height));
+  this->addChild(lab);
+#endif
 
-    //    // add the label as a child to this layer
-    //    this->addChild(label, 1);
-    //}
+#ifdef Test_vector
+  Label* label1 = Label::create("Shaun", "Arial", 30);
+  label1->setPosition(Point(250, 500));
 
-    //// add "HelloWorld" splash screen"
-    //auto sprite = Sprite::create("HelloWorld.png");
-    //if (sprite == nullptr)
-    //{
-    //    problemLoading("'HelloWorld.png'");
-    //}
-    //else
-    //{
-    //    // position the sprite on the center of the screen
-    //    sprite->setPosition(Vec2(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
+  Label* label2 = Label::create("Shane", "Arial", 30);
+  label2->setPosition(Point(250, 200));
 
-    //    // add the sprite as a child to this layer
-    //    this->addChild(sprite, 0);
-    //}
+  Vector<Label*> vec;
+
+  vec.pushBack(label1), vec.pushBack(label2);
+
+  for (auto lab : vec) {
+    this->addChild(lab);
+  }
+#endif
+
+#ifdef Test3_19
+  auto valStr = Value("Shaun is");
+  auto valInt = Value(0);
+  log("%s %d", valStr.asString().c_str(), valInt.asInt());
+#endif
+
+#ifdef Test_3_14
+  //获取屏幕大小
+  Size visibleSize = Director::getInstance()->getVisibleSize();
+
+  //创建菜单项
+  MenuItemImage* pCloseItem =
+      MenuItemImage::create("CloseNormal.png", "CloseSelected.png", this,
+                            menu_selector(HelloWorld::menuCloseCallback)
+  );
+
+  //创建一个标签
+  Label* label = Label::create("I am Label item.", "Arial", 30);
+  
+  //用标签对象创建一个标签菜单项 created with label
+  MenuItemLabel* pLabelItem = MenuItemLabel::create(label);
+   
+  //创建菜单
+  Menu* pMenu = Menu::create(pCloseItem, pLabelItem, NULL);
+
+  //所有菜单项在垂直方向上自动排列
+  pMenu->alignItemsVertically();
+
+  //设置菜单坐标
+  pMenu->setPosition(Point(visibleSize.width / 2, visibleSize.height / 2));
+
+  //添加到菜单层里
+  this->addChild(pMenu, 1);
+#endif
+
+#ifdef origin
+    //////////////////////////////
+    // 1. super init first
+    if ( !Scene::init() )
+    {
+        return false;
+    }
+
+    auto visibleSize = Director::getInstance()->getVisibleSize();
+    Vec2 origin = Director::getInstance()->getVisibleOrigin();
+
+    /////////////////////////////
+    // 2. add a menu item with "X" image, which is clicked to quit the program
+    //    you may modify it.
+
+    // add a "close" icon to exit the progress. it's an autorelease object
+    auto closeItem = MenuItemImage::create(
+                                           "CloseNormal.png",
+                                           "CloseSelected.png",
+                                           CC_CALLBACK_1(HelloWorld::menuCloseCallback, this));
+
+    if (closeItem == nullptr ||
+        closeItem->getContentSize().width <= 0 ||
+        closeItem->getContentSize().height <= 0)
+    {
+        problemLoading("'CloseNormal.png' and 'CloseSelected.png'");
+    }
+    else
+    {
+        float x = origin.x + visibleSize.width - closeItem->getContentSize().width/2;
+        float y = origin.y + closeItem->getContentSize().height/2;
+        closeItem->setPosition(Vec2(x,y));
+    }
+
+    // create menu, it's an autorelease object
+    auto menu = Menu::create(closeItem, NULL);
+    menu->setPosition(Vec2::ZERO);
+    this->addChild(menu, 1);
+
+    /////////////////////////////
+    // 3. add your codes below...
+
+    // add a label shows "Hello World"
+    // create and initialize a label
+
+    auto label = Label::createWithTTF("Hello World", "fonts/Marker Felt.ttf", 24);
+    if (label == nullptr)
+    {
+        problemLoading("'fonts/Marker Felt.ttf'");
+    }
+    else
+    {
+        // position the label on the center of the screen
+        label->setPosition(Vec2(origin.x + visibleSize.width/2,
+                                origin.y + visibleSize.height - label->getContentSize().height));
+
+        // add the label as a child to this layer
+        this->addChild(label, 1);
+    }
+
+    // add "HelloWorld" splash screen"
+    auto sprite = Sprite::create("HelloWorld.png");
+    if (sprite == nullptr)
+    {
+        problemLoading("'HelloWorld.png'");
+    }
+    else
+    {
+        // position the sprite on the center of the screen
+        sprite->setPosition(Vec2(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
+
+        // add the sprite as a child to this layer
+        this->addChild(sprite, 0);
+    }
+#endif
     return true;
 }
+
 
 
 void HelloWorld::menuCloseCallback(Ref* pSender)
