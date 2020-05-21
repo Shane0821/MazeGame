@@ -52,8 +52,13 @@ bool HelloWorld::init()
 
 #ifndef Test_Scale9
   Scale9Sprite* wizard = Scale9Sprite::create("wizard.png");
-  if (wizard == nullptr) return true;
-  wizard->setContentSize(Size(200, 200));
+
+  if (wizard == nullptr) {
+    log("no such image");
+    return true;
+  }
+
+  wizard->setContentSize(Size(50, 75));
 
   wizard->setPosition(Point(200, 200));
 
