@@ -42,6 +42,16 @@ static void problemLoading(const char* filename)
     printf("Depending on how you compiled you might have to add 'Resources/' in front of filenames in HelloWorldScene.cpp\n");
 }
 
+void HelloWorld::backHome() {
+  Size visibleSize = Director::getInstance()->getVisibleSize();
+
+  auto label = Label::create("I am Home!", "Arial", 35);
+  
+  label->setPosition(Point(visibleSize.width / 2, visibleSize.height / 2));
+  this->addChild(label);
+  //
+}
+
 // on "init" you need to initialize your instance
 bool HelloWorld::init()
 {
@@ -49,13 +59,59 @@ bool HelloWorld::init()
   if ( !Scene::init() ) {
       return false;
   }
-#ifndef Test_Action_call_back
+#ifndef Test_touch
+  auto listener = EventListenerTouchOneByOne::create();
+  listener->onTouchBegan = [](Touch* touch, Event* event) {
+    Point pos2 = touch->getLocationInView();
+    Point pos3 = Director::getInstance()->convertToGL(pos3);
+    //笛卡尔坐标 左下角为原点
+
+    log("touching x = %f, y = %f", pos3.x, pos3.y);
+    return true;
+  };
+
+  listener->onTouchMoved = [](Touch* touch, Event* event) { 
+      log("on touch moved");
+  };
+
+  listener->onTouchEnded = [](Touch* touch, Event* event) {
+    log("on touch ended");
+  };
+
+  _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
+  //事件调度员
+#endif
+
+#ifdef Test_lambda 
+  auto func = [&]() {
+    auto wizard = Sprite::create("wizard.png");
+    wizard->setPosition(Point(200, 200));
+    this->addChild(wizard);
+    wizard->setScale(2);
+  };
+
+  auto callFunc = CallFunc::create(func);
+  this->runAction(callFunc);
+#endif
+
+
+#ifdef Test_Action_call_back
   Size visibleSize = Director::getInstance()->getVisibleSize();
 
   Sprite* wizard = Sprite::create("wizard.png");
   wizard->setPosition(Point(visibleSize.width / 2, visibleSize.height / 2));
   this->addChild(wizard);
 
+  auto moveToHome = MoveTo::create(10.0f, Point(visibleSize.width, visibleSize.height / 2));
+
+  //lambda
+  auto callbackFunc = [&] (){ backHome();};
+
+  auto callFunc = CallFunc::create(callbackFunc);
+
+  Action* actions = Sequence::create(moveToHome, callFunc, NULL);
+
+  wizard->runAction(actions);
 #endif
 
 
