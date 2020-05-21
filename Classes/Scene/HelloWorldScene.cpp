@@ -25,7 +25,7 @@
 #include "HelloWorldScene.h"
 #include "SimpleAudioEngine.h"
 #include "cocos-ext.h"
-#include "../proj.win32/secondScene.h"
+#include "Scene/secondScene.h"
 
 USING_NS_CC;
 USING_NS_CC_EXT;
@@ -49,8 +49,90 @@ bool HelloWorld::init()
   if ( !Scene::init() ) {
       return false;
   }
+#ifndef Test_Action_call_back
+  Size visibleSize = Director::getInstance()->getVisibleSize();
 
-#ifndef Test_Scale9
+  Sprite* wizard = Sprite::create("wizard.png");
+  wizard->setPosition(Point(visibleSize.width / 2, visibleSize.height / 2));
+  this->addChild(wizard);
+
+#endif
+
+
+#ifdef Test_Seq_Spawn
+  Size visibleSize = Director::getInstance()->getVisibleSize();
+
+  Sprite* wizard = Sprite::create("wizard.png");
+  wizard->setPosition(Point(visibleSize.width / 2, visibleSize.height / 2));
+  this->addChild(wizard);
+
+  auto moveBy = MoveBy::create(2.2f, Point(40, 20));
+
+  auto jumpBy = JumpBy::create(3.0f, Point(50, 1), 100, 5);
+
+  auto rotateBy = RotateBy::create(2.5f, 200, 10);
+
+  //Action* actions = Spawn::create(moveBy, jumpBy, rotateBy, NULL);
+  Action* actions = Sequence::create(moveBy, jumpBy, rotateBy, NULL);
+  wizard->runAction(actions);
+#endif
+
+
+#ifdef Test_repeat
+  Size visibleSize = Director::getInstance()->getVisibleSize();
+
+  Sprite* wizard = Sprite::create("wizard.png");
+  wizard->setPosition(Point(visibleSize.width / 2, visibleSize.height / 2));
+  this->addChild(wizard);
+
+  JumpBy* jumpBy = JumpBy::create(3.0f, Point(50, 1), 100, 1);
+
+  RepeatForever* repeatForever = RepeatForever::create(jumpBy);
+
+  Repeat* repeat = Repeat::create(jumpBy, 3);
+
+  wizard->runAction(repeatForever);
+#endif
+
+#ifdef Test_blink
+  Size visibleSize = Director::getInstance()->getVisibleSize();
+
+  Sprite* wizard = Sprite::create("wizard.png");
+  wizard->setPosition(Point(visibleSize.width / 2, visibleSize.height / 2));
+  this->addChild(wizard);
+
+  Blink* blink = Blink::create(3.0f, 3);
+
+  wizard->runAction(blink);
+#endif
+
+#ifdef Test_scale
+  Size visibleSize = Director::getInstance()->getVisibleSize();
+
+  Sprite* wizard = Sprite::create("wizard.png");
+  wizard->setPosition(Point(visibleSize.width / 2, visibleSize.height / 2));
+  wizard->setScale(2.0f);
+  this->addChild(wizard);
+
+  ScaleBy* scaleTo = ScaleBy::create(2.8f, 0.4f, 1.0f);
+
+  wizard->runAction(scaleTo);
+#endif
+
+#ifdef Test_move
+  Size visibleSize = Director::getInstance()->getVisibleSize();
+
+  Sprite* wizard = Sprite::create("wizard.png");
+  wizard->setPosition(Point(50, visibleSize.height / 2));
+  this->addChild(wizard);
+
+  MoveBy* moveTo = MoveBy::create(0.9f, Point(250, 150));
+
+  wizard->runAction(moveTo);
+#endif
+
+
+#ifdef Test_Scale9
   Scale9Sprite* wizard = Scale9Sprite::create("wizard.png");
 
   if (wizard == nullptr) {

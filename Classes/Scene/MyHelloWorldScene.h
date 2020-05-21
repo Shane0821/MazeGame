@@ -13,5 +13,4 @@ class myScene : public Layer {
   CREATE_FUNC(myScene);
 };
 
-
 #endif

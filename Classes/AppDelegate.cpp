@@ -23,7 +23,8 @@
  ****************************************************************************/
 
 #include "AppDelegate.h"
-#include "HelloWorldScene.h"
+#include "Scene\HelloWorldScene.h"
+#include "Scene\MyHelloWorldScene.h"
 
 // #define USE_AUDIO_ENGINE 1
 // #define USE_SIMPLE_AUDIO_ENGINE 1
@@ -39,8 +40,6 @@ using namespace cocos2d::experimental;
 #include "audio/include/SimpleAudioEngine.h"
 using namespace CocosDenshion;
 #endif
-//#include "MyHelloWorldScene.h"
-#include "../proj.win32/MyHelloWorldScene.h"
 
 USING_NS_CC;
 
