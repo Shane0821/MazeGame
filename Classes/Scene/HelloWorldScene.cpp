@@ -55,16 +55,56 @@ void HelloWorld::backHome() {
 // on "init" you need to initialize your instance
 bool HelloWorld::init()
 {
-    //´úÂëÇåµ¥ 3-14
+    //ï¿½ï¿½ï¿½ï¿½ï¿½åµ¥ 3-14
   if ( !Scene::init() ) {
       return false;
   }
-#ifndef Test_touch
+#ifndef Test_One_By_One_Touch 
+  Size visibleSize = Director::getInstance()->getVisibleSize();
+
+  auto sp1 = Sprite::create("wizard.png");
+  sp1->setPosition(Point(visibleSize.width / 2, visibleSize.height / 2));
+  this->addChild(sp1);
+
+  auto sp2 = Sprite::create("Knight.png");
+  sp2->setPosition(Point(visibleSize.width / 2, visibleSize.height / 2));
+  this->addChild(sp2);
+
+  auto listener = EventListenerTouchOneByOne::create();
+  listener->onTouchBegan = [](Touch* touch, Event* event) {
+    auto target = static_cast<Sprite*>(event->getCurrentTarget());
+
+    Point pos =
+        Director::getInstance()->convertToGL(touch->getLocationInView());
+
+    if (target->getBoundingBox().containsPoint(pos)) {
+      target->setOpacity(100);
+      return true;
+    }
+    return false;
+    //
+  };
+
+  //AllAtOnce->onTouchesEnded
+  listener->onTouchEnded = [](Touch* touch, Event* event) {
+    auto target = static_cast<Sprite*>(event->getCurrentTarget());
+
+    target->setOpacity(255);
+  };
+
+  listener->setSwallowTouches(true);
+
+  _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, sp1);
+
+  _eventDispatcher->addEventListenerWithSceneGraphPriority(listener->clone(), sp2);
+#endif
+
+#ifdef Test_touch
   auto listener = EventListenerTouchOneByOne::create();
   listener->onTouchBegan = [](Touch* touch, Event* event) {
     Point pos2 = touch->getLocationInView();
     Point pos3 = Director::getInstance()->convertToGL(pos3);
-    //µÑ¿¨¶û×ø±ê ×óÏÂ½ÇÎªÔ­µã
+    //ï¿½Ñ¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Â½ï¿½ÎªÔ­ï¿½ï¿½
 
     log("touching x = %f, y = %f", pos3.x, pos3.y);
     return true;
@@ -79,7 +119,7 @@ bool HelloWorld::init()
   };
 
   _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
-  //ÊÂ¼þµ÷¶ÈÔ±
+  //ï¿½Â¼ï¿½ï¿½ï¿½ï¿½ï¿½Ô±
 #endif
 
 #ifdef Test_lambda 
@@ -244,31 +284,31 @@ bool HelloWorld::init()
 #endif
 
 #ifdef Test_3_14
-  //»ñÈ¡ÆÁÄ»´óÐ¡
+  //ï¿½ï¿½È¡ï¿½ï¿½Ä»ï¿½ï¿½Ð¡
   Size visibleSize = Director::getInstance()->getVisibleSize();
 
-  //´´½¨²Ëµ¥Ïî
+  //ï¿½ï¿½ï¿½ï¿½ï¿½Ëµï¿½ï¿½ï¿½
   MenuItemImage* pCloseItem =
       MenuItemImage::create("CloseNormal.png", "CloseSelected.png", this,
                             menu_selector(HelloWorld::menuCloseCallback)
   );
 
-  //´´½¨Ò»¸ö±êÇ©
+  //ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½Ç©
   Label* label = Label::create("I am Label item.", "Arial", 30);
   
-  //ÓÃ±êÇ©¶ÔÏó´´½¨Ò»¸ö±êÇ©²Ëµ¥Ïî created with label
+  //ï¿½Ã±ï¿½Ç©ï¿½ï¿½ï¿½ó´´½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½Ç©ï¿½Ëµï¿½ï¿½ï¿½ created with label
   MenuItemLabel* pLabelItem = MenuItemLabel::create(label);
    
-  //´´½¨²Ëµ¥
+  //ï¿½ï¿½ï¿½ï¿½ï¿½Ëµï¿½
   Menu* pMenu = Menu::create(pCloseItem, pLabelItem, NULL);
 
-  //ËùÓÐ²Ëµ¥ÏîÔÚ´¹Ö±·½ÏòÉÏ×Ô¶¯ÅÅÁÐ
+  //ï¿½ï¿½ï¿½Ð²Ëµï¿½ï¿½ï¿½ï¿½Ú´ï¿½Ö±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½ï¿½
   pMenu->alignItemsVertically();
 
-  //ÉèÖÃ²Ëµ¥×ø±ê
+  //ï¿½ï¿½ï¿½Ã²Ëµï¿½ï¿½ï¿½ï¿½ï¿½
   pMenu->setPosition(Point(visibleSize.width / 2, visibleSize.height / 2));
 
-  //Ìí¼Óµ½²Ëµ¥²ãÀï
+  //ï¿½ï¿½ï¿½Óµï¿½ï¿½Ëµï¿½ï¿½ï¿½ï¿½ï¿½
   this->addChild(pMenu, 1);
 #endif
 
