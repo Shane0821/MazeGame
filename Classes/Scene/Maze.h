@@ -20,15 +20,23 @@ private:
 	vector<vector<pair<int, int>>> Pre; //记录最短路上前驱
 	int rowScale, columnScale;          //迷宫规模
 	
+	int timeLimit;
+	static int level;
+	
 	static float pictureScaleX, pictureScaleY; //缩放比例
 
 	Player* player = nullptr;
 
+	Label* timeLable = nullptr;
+
+	Sprite* portalEnd = nullptr;
+	Sprite* portalStart = nullptr;
+
 	template <typename T>
-	void InitVector(vector<vector<T>>&, const T&); //初始化vetor，定大小，内容
-	void BuildMap(); //生成地图
-	void PrintMap();//打印地图
-	void SearchShortestPath();        //求最短路
+	void initVector(vector<vector<T>>&, const T&); //初始化vetor，定大小，内容
+	void buildMap(); //生成地图
+	void printMap();//打印地图
+	int searchPath(); //求最短路
 
 	void createFloor(float, float, Value); //生成地板
 	void createWall(float, float, Value); //生成墙
@@ -40,8 +48,6 @@ private:
 
   CREATE_FUNC(Maze);
 
-  //
  // void ShowPath();//显示路径
 };
-
 #endif
