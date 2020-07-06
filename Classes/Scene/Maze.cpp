@@ -20,7 +20,7 @@ bool Maze::init() {
     this->pictureScaleY = this->pictureScaleX = 788.0f / this->columnScale / 40.0f;
 
     this->buildMap();
-    this->curTime = this->timeLimit = this->searchPath()/ 2;
+    this->curTime = this->timeLimit = this->searchPath()/ 2 + 4;
     this->printMap();
 
     this->player = Player::create();
@@ -244,11 +244,12 @@ void Maze::createWall(float curX, float curY, Value fileName) {
 
 void Maze::updateTimeLabel(float delta) {
     if (curTime == 0) {
+        this->showPath(player->getPositionX(), player->getPositionY());
         this->timeLabel->setVisible(false);
+        this->level = 0;
         this->failLabel->setVisible(true);
-        this->showPath(player->getPositionX(),player->getPositionY());
-        this->cleanup();
         this->exitMenu->setVisible(true);
+        this->cleanup();
         return;
     }
     curTime--;

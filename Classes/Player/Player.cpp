@@ -108,11 +108,14 @@ void Player::checkEnd() {
 	if (this->getPosition().getDistance(maze->portalEnd->getPosition()) <= 15.0f * Maze::pictureScaleX) {
 		maze->level++;
 		this->cleanup();
-		if (maze->level < 4)
+		if (maze->level < 4) {
+			this->maze->cleanup();
 			Director::getInstance()->replaceScene(TransitionCrossFade::create(2.0f, Maze::createScene()));
+		}
 		else {
 			maze->level = 0;
 			Maze::pictureScaleX = Maze::pictureScaleY = 788.0f / 9.0f / 40.0f;
+			this->maze->cleanup();
 			Director::getInstance()->replaceScene(TransitionFade::create(0.0f, EndScene::createScene()));
 		}
 	}
