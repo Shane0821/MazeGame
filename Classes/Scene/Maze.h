@@ -16,18 +16,19 @@ class Maze : public Scene {
 
 private:
 	vector<vector<bool>> Map; //记录Map[i][j]类型 0表示墙，1表示路径
-	vector<vector<Sprite*>> MapSprite; //地图精灵
-	vector<vector<pair<int, int>>> Pre; //记录最短路上前驱
+	vector<vector<pair<int, int>>> Pre; //记录路径上前驱
 	int rowScale, columnScale;          //迷宫规模
 	
-	int timeLimit;
-	static int level;
+	int timeLimit, curTime;
 	
 	static float pictureScaleX, pictureScaleY; //缩放比例
 
 	Player* player = nullptr;
 
-	Label* timeLable = nullptr;
+	Label* timeLabel = nullptr;
+	Label* failLabel = nullptr;
+	
+	Menu* exitMenu = nullptr;
 
 	Sprite* portalEnd = nullptr;
 	Sprite* portalStart = nullptr;
@@ -40,14 +41,17 @@ private:
 
 	void createFloor(float, float, Value); //生成地板
 	void createWall(float, float, Value); //生成墙
+	void showPath(float, float);//显示路径
+
+	void updateTimeLabel(float);//更新时间标签
+	void mazeCloseCallBackMenu(Ref*);//回调主界面
 
  public:
-  static Scene* createScene();
+	static int level;
+	static Scene* createScene();
 
-  virtual bool init();
+	virtual bool init();
 
-  CREATE_FUNC(Maze);
-
- // void ShowPath();//显示路径
+	CREATE_FUNC(Maze);
 };
 #endif

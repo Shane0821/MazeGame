@@ -1,6 +1,7 @@
 #include "EndScene.h"
 #include "StartScene.h"
 #include "Player/Player.h"
+#include "Scene/Maze.h"
 Scene* EndScene::createScene() { return EndScene::create(); }
 
 bool EndScene::init() {

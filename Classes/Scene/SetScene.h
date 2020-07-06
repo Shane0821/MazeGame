@@ -29,6 +29,6 @@ private:
 	/*音量大小标签*/
 	Label* volumeNumLab;
 
-	int volume = 50;//初始音量
+	static int volume;//初始音量
 };
 #endif 

@@ -2,7 +2,7 @@
 #define _STARTSCENE_H_
 
 #include "cocos2d.h"
-#include <SimpleAudioEngine.h>
+#include "SimpleAudioEngine.h"
 USING_NS_CC;
 
 class StartScene : public Scene

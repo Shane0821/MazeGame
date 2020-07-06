@@ -72,33 +72,33 @@ void Player::checkCollision() {
 	float playerPosX = this->getPositionX();
 	float playerPosY = this->getPositionY();
 	if (this->speedX > 0.0f) {
-		int i = floor((playerPosX + 20 * pictureScale) / 40 / pictureScale);
-		int upj = floor(playerPosY / 40 / pictureScale);
-		int downj = floor((playerPosY - 20.0f * pictureScale) / 40 / pictureScale);
+		int i = (playerPosX + 20.0f * pictureScale) / 40.0f / pictureScale;
+		int upj = playerPosY / 40.0f / pictureScale;
+		int downj = (playerPosY - 20.0f * pictureScale) / 40.0f / pictureScale;
 		if (i >= maze->rowScale || !maze->Map[i][upj] || !maze->Map[i][downj])
 			this->speedX = 0;
 	}
 
 	if (this->speedX < 0.0f) {
-		int i = floor((playerPosX - 20 * pictureScale) / 40 / pictureScale);
-		int upj = floor(playerPosY / 40 / pictureScale);
-		int downj = floor((playerPosY - 20.0f * pictureScale) / 40 / pictureScale);
+		int i = (playerPosX - 20.0f * pictureScale) / 40.0f / pictureScale;
+		int upj = playerPosY / 40.0f / pictureScale;
+		int downj = (playerPosY - 20.0f * pictureScale) / 40.0f / pictureScale;
 		if (i < 0 || !maze->Map[i][upj] || !maze->Map[i][downj])
 			this->speedX = 0;
 	}
 
 	if (this->speedY < 0.0f) {
-		int j = floor((playerPosY - 26.0f * pictureScale) / 40 / pictureScale);
-		int lefti = floor((playerPosX - 10.0f * pictureScale) / 40 / pictureScale);
-		int righti = floor((playerPosX + 10.0f * pictureScale) / 40 / pictureScale);
+		int j = (playerPosY - 26.0f * pictureScale) / 40.0f / pictureScale;
+		int lefti = (playerPosX - 10.0f * pictureScale) / 40.0f / pictureScale;
+		int righti = (playerPosX + 10.0f * pictureScale) / 40.0f / pictureScale;
 		if (j < 0 || !maze->Map[lefti][j] || !maze->Map[righti][j])
 			this->speedY = 0;
 	}
 
 	if (this->speedY > 0.0f) {
-		int j = floor((playerPosY + 10.0f * pictureScale) / 40 / pictureScale);
-		int lefti = floor((playerPosX - 10.0f * pictureScale) / 40 / pictureScale);
-		int righti = floor((playerPosX + 10.0f * pictureScale) / 40 / pictureScale);
+		int j = (playerPosY + 10.0f * pictureScale) / 40.0f / pictureScale;
+		int lefti = (playerPosX - 10.0f * pictureScale) / 40.0f / pictureScale;
+		int righti = (playerPosX + 10.0f * pictureScale) / 40.0f / pictureScale;
 		if (j >= maze->columnScale || !maze->Map[lefti][j] || !maze->Map[righti][j])
 			this->speedY = 0;
 	}
@@ -109,9 +109,10 @@ void Player::checkEnd() {
 		maze->level++;
 		this->cleanup();
 		if (maze->level < 4)
-			Director::getInstance()->replaceScene(TransitionFade::create(2.0f, Maze::createScene()));
+			Director::getInstance()->replaceScene(TransitionCrossFade::create(2.0f, Maze::createScene()));
 		else {
 			maze->level = 0;
+			Maze::pictureScaleX = Maze::pictureScaleY = 788.0f / 9.0f / 40.0f;
 			Director::getInstance()->replaceScene(TransitionFade::create(0.0f, EndScene::createScene()));
 		}
 	}

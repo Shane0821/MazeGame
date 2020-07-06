@@ -1,5 +1,6 @@
 #include "Maze.h"
 #include "Player/Player.h"
+#include "StartScene.h"
 
 //D:\GitRepo\Game\proj.win32\bin\soulKnight\Debug\Resources\Map
 
@@ -12,14 +13,14 @@ float Maze::pictureScaleY = 1.0f;
 Scene* Maze::createScene() { return Maze::create(); }
 
 bool Maze::init() { 
-    static int rScale[] = { 11, 19, 31, 45 };
-    static int cScale[] = { 9, 15, 25, 35 };
+    static int rScale[] = { 11, 19, 31, 39 };
+    static int cScale[] = { 9, 15, 25, 31 };
 
 	this->rowScale = rScale[level], this->columnScale = cScale[level];
     this->pictureScaleY = this->pictureScaleX = 788.0f / this->columnScale / 40.0f;
 
     this->buildMap();
-    this->timeLimit = this->searchPath()/ 2;
+    this->curTime = this->timeLimit = this->searchPath()/ 2;
     this->printMap();
 
     this->player = Player::create();
@@ -39,6 +40,24 @@ bool Maze::init() {
     this->portalEnd->setGlobalZOrder(1);
     this->portalEnd->setPosition(Point((40.0f * rowScale - 20.0f) * this->pictureScaleX, (40.0f * columnScale - 40.0f) * this->pictureScaleY));;
     this->addChild(portalEnd);
+
+    this->timeLabel = Label::createWithTTF("", "fonts/Marker Felt.ttf", 36);
+    this->timeLabel->setPosition(Point((40.0f * rowScale * this->pictureScaleX + 1400) / 2, 450));
+    this->addChild(timeLabel);
+
+    this->failLabel = Label::createWithTTF("Game Clearance Failed", "fonts/Marker Felt.ttf", 36);
+    this->failLabel->setPosition(Point((40.0f * rowScale * this->pictureScaleX + 1400) / 2, 450));
+    this->addChild(failLabel);
+    this->failLabel->setVisible(false);
+
+    auto exitLabel = Label::createWithTTF("Back to Menu", "fonts/Marker Felt.ttf", 36);
+    auto callBackButton = MenuItemLabel::create(exitLabel, CC_CALLBACK_1(Maze::mazeCloseCallBackMenu, this));
+    this->exitMenu = Menu::create(callBackButton, NULL);
+    this->exitMenu->setPosition(Point((40.0f * rowScale * this->pictureScaleX + 1400) / 2, 350));
+    this->addChild(exitMenu);
+    this->exitMenu->setVisible(false);
+
+    this->schedule(schedule_selector(Maze::updateTimeLabel), 1.0f);
     return true;
 }
 
@@ -51,7 +70,7 @@ int Maze::searchPath() {
     
     initVector(Vis, false);
     initVector(Dis, 0);
-    initVector(Pre, make_pair(this->rowScale, this->rowScale-2));
+    initVector(Pre, make_pair(this->rowScale, this->columnScale-2));
     
     queue<pair<int, int>> Queue;
     Queue.push(make_pair(this->rowScale-1, this->columnScale-2));
@@ -149,6 +168,37 @@ void Maze::printMap() {
     }
 }
 
+void Maze::showPath(float lastPosX, float lastPosY) {
+    int x = lastPosX / 40.0f / Maze::pictureScaleX;
+    int y = lastPosY / 40.0f / Maze::pictureScaleY;
+
+    pair<int, int> now = this->Pre[x][y];
+    x = now.first;
+    y = now.second;
+
+    while (make_pair(x, y) != make_pair(this->rowScale - 1, this->columnScale - 2)) {
+        int nextX = this->Pre[x][y].first;
+        int nextY = this->Pre[x][y].second;
+        Sprite* sprite = nullptr;
+        
+        if (nextY > y) sprite = Sprite::create("up.png");//up arrow 
+        else if (nextY < y) sprite = Sprite::create("down.png");//down arrrow
+        else if (nextX > x) sprite = Sprite::create("right.png");//right arrrow
+        else sprite = Sprite::create("left.png");//left arrrow
+        
+        sprite->setPosition(Point(20.0f* Maze::pictureScaleX + x * Maze::pictureScaleX * 40.0f,
+                                  20.0f* Maze::pictureScaleX + y * Maze::pictureScaleY * 40.0f));
+        sprite->setGlobalZOrder(1);
+        this->addChild(sprite);
+        
+        sprite->setScaleX(Maze::pictureScaleX);
+        sprite->setScaleY(Maze::pictureScaleY);
+        
+        x = nextX;
+        y = nextY;
+    }
+}
+
 void Maze::createFloor(float curX, float curY, Value fileName) {
     Value floorName("floor" + Value(1 + rand() % 3).asString() + ".png");
 
@@ -190,4 +240,21 @@ void Maze::createWall(float curX, float curY, Value fileName) {
 
     sprite->setScaleX(pictureScaleX);
     sprite->setScaleY(pictureScaleY);
+}
+
+void Maze::updateTimeLabel(float delta) {
+    if (curTime == 0) {
+        this->timeLabel->setVisible(false);
+        this->failLabel->setVisible(true);
+        this->showPath(player->getPositionX(),player->getPositionY());
+        this->cleanup();
+        this->exitMenu->setVisible(true);
+        return;
+    }
+    curTime--;
+    this->timeLabel->setString("Time Remain: " + Value(curTime).asString() + " s");
+}
+
+void Maze::mazeCloseCallBackMenu(Ref* pSender) {
+    Director::getInstance()->replaceScene(TransitionCrossFade::create(0.0f, StartScene::createScene()));
 }

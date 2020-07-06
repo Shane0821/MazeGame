@@ -2,12 +2,12 @@
 #include "StartScene.h"
 #include "SimpleAudioEngine.h"
 
-USING_NS_CC;
-
 Scene* SetScene::createScene() { return SetScene::create(); }
 
+int SetScene::volume = 50;
 
 bool SetScene::init() {
+
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
@@ -20,7 +20,7 @@ bool SetScene::init() {
 
 	auto exitImg = MenuItemImage::create (
 			"exit.png",
-			"exit01.png",
+			"exit.png",
 			CC_CALLBACK_1(SetScene::menuCloseCallbackEnd, this));
 
 	auto changeMenuOn = MenuItemLabel::create(changeLabOn, CC_CALLBACK_1(SetScene::menuCloseCallbackChange, this));
