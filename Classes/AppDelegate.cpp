@@ -26,9 +26,10 @@
 #include "Scene\Maze.h"
 #include "Scene\StartScene.h"
 #include "Scene\EndScene.h"
+#include "SimpleAudioEngine.h"
 
  // #define USE_AUDIO_ENGINE 1
- // #define USE_SIMPLE_AUDIO_ENGINE 1
+// #define USE_SIMPLE_AUDIO_ENGINE 1
 
 
 USING_NS_CC;

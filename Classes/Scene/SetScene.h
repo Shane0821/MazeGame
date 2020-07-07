@@ -6,6 +6,8 @@ USING_NS_CC;
 
 class SetScene : public Scene
 {
+	friend class EndScene;
+	static int volume;//初始音量
 public:
 	static Scene* createScene();
 
@@ -28,7 +30,5 @@ private:
 
 	/*音量大小标签*/
 	Label* volumeNumLab;
-
-	static int volume;//初始音量
 };
 #endif 

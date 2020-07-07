@@ -2,12 +2,18 @@
 #include "StartScene.h"
 #include "Player/Player.h"
 #include "Scene/Maze.h"
+#include "Scene/SetScene.h"
 Scene* EndScene::createScene() { return EndScene::create(); }
 
 bool EndScene::init() {
 	//背景图
 	auto visibleSize = Director::getInstance()->getVisibleSize();
 	Vec2 origin = Director::getInstance()->getVisibleOrigin();
+	//bgm
+	auto audio = CocosDenshion::SimpleAudioEngine::getInstance();
+	audio->pauseBackgroundMusic();
+	audio->setBackgroundMusicVolume(SetScene::volume / 100.0f);
+	audio->playBackgroundMusic("edMusic.mp3", false);//循环播放
 
 	//返回按钮
 	auto startImg = Sprite::create("end.png");
@@ -41,6 +47,6 @@ bool EndScene::init() {
 
 //回调函数，返回主菜单
 void EndScene::menuCloseCallbackStart(Ref* pSender)	{
-	Director::getInstance()->replaceScene(TransitionCrossFade::create(2.0f, StartScene::createScene()));
+	Director::getInstance()->replaceScene(TransitionFade::create(2.0f, StartScene::createScene()));
 }
 

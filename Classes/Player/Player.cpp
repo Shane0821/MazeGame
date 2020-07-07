@@ -116,7 +116,7 @@ void Player::checkEnd() {
 			maze->level = 0;
 			Maze::pictureScaleX = Maze::pictureScaleY = 788.0f / 9.0f / 40.0f;
 			this->maze->cleanup();
-			Director::getInstance()->replaceScene(TransitionFade::create(0.0f, EndScene::createScene()));
+			Director::getInstance()->replaceScene(TransitionFade::create(2.0f, EndScene::createScene()));
 		}
 	}
 }
