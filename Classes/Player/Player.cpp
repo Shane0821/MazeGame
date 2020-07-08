@@ -124,20 +124,20 @@ void Player::checkEnd() {
 void Player::checkBorder() {
 	float playerPosX = this->getPositionX();
 	float playerPosY = this->getPositionY();
-	if (this->speedX < 0.0f && playerPosX - 20.0 < 0)
+	if (this->speedX < 0.0f && playerPosX - 20.0 * Maze::pictureScaleX < 0)
 		this->speedX = 0;
-	if (this->speedX > 0.0f && playerPosX + 20.0 > 1400)
+	if (this->speedX > 0.0f && playerPosX + 20.0 * Maze::pictureScaleX > 1400)
 		this->speedX = 0;
 }
 
 void Player::update(float delta) {
 	Point position = this->getPosition();
 	
-	if(this->maze != nullptr) {
+	if (this->maze != nullptr) {
 		this->checkCollision();
 		this->checkEnd();
-	}else
-		this->checkBorder();
+	}	
+	this->checkBorder();
 	this->setPosition(position + Point(this->speedX, this->speedY));
 }
 
