@@ -9,9 +9,10 @@ bool StartScene::init(){
 
 	/*背景音乐*/
 	audio = CocosDenshion::SimpleAudioEngine::getInstance();
-
-	if (!audio->isBackgroundMusicPlaying())
+	if (!audio->isBackgroundMusicPlaying()) {
 		audio->playBackgroundMusic("bkMusic.mp3", true);//循环播放
+		audio->setBackgroundMusicVolume(SetScene::volume / 100.0f);
+	}	
 
 	/*开始界面背景图像*/
 	auto startImg = Sprite::create("start.png");

@@ -7,6 +7,7 @@ USING_NS_CC;
 class SetScene : public Scene
 {
 	friend class EndScene;
+	friend class StartScene;
 	static int volume;//初始音量
 public:
 	static Scene* createScene();

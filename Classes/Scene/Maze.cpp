@@ -13,14 +13,14 @@ float Maze::pictureScaleY = 1.0f;
 Scene* Maze::createScene() { return Maze::create(); }
 
 bool Maze::init() { 
-    static int rScale[] = { 11, 19, 31, 39 };
-    static int cScale[] = { 9, 15, 25, 31 };
+    static int rScale[] = { 11, 19, 29, 39 };
+    static int cScale[] = { 9, 15, 21, 31 };
 
 	this->rowScale = rScale[level], this->columnScale = cScale[level];
     this->pictureScaleY = this->pictureScaleX = 788.0f / this->columnScale / 40.0f;
 
     this->buildMap();
-    this->curTime = this->timeLimit = this->searchPath()/ 2 + 4;
+    this->curTime = this->timeLimit = this->searchPath()/ 2.5f + 4;
     this->printMap();
 
     this->player = Player::create();

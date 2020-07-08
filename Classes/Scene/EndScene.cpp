@@ -47,6 +47,8 @@ bool EndScene::init() {
 
 //回调函数，返回主菜单
 void EndScene::menuCloseCallbackStart(Ref* pSender)	{
+	auto audio = CocosDenshion::SimpleAudioEngine::getInstance();
+	audio->stopBackgroundMusic();
 	Director::getInstance()->replaceScene(TransitionFade::create(2.0f, StartScene::createScene()));
 }
 
