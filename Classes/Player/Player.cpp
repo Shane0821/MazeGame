@@ -131,8 +131,7 @@ void Player::checkBorder() {
 }
 
 void Player::update(float delta) {
-	Point position = this->getPosition();
-	
+	Point position = this->getPosition();	
 	if (this->maze != nullptr) {
 		this->checkCollision();
 		this->checkEnd();

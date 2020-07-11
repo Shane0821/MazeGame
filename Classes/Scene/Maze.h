@@ -23,14 +23,14 @@ private:
 	
 	static float pictureScaleX, pictureScaleY; //缩放比例
 
-	Player* player = nullptr;
+	Player* player = nullptr;//人物
 
-	Label* timeLabel = nullptr;
-	Label* failLabel = nullptr;
+	Label* timeLabel = nullptr;//计时标签
+	Label* failLabel = nullptr;//失败提示标签
 	
-	Menu* exitMenu = nullptr;
+	Menu* exitMenu = nullptr;//返回主菜单按钮
 
-	Sprite* portalEnd = nullptr;
+	Sprite* portalEnd = nullptr;//两个传送门
 	Sprite* portalStart = nullptr;
 
 	template <typename T>
